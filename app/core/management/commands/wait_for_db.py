@@ -4,7 +4,7 @@ import time
 from psycopg2 import OperationalError as Psycopg2OpError
 
 from django.db.utils import OperationalError
-from django.core.management import BaseCommand
+from django.core.management.base import BaseCommand
 
 
 class Command(BaseCommand):
@@ -13,7 +13,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         """ handles checking of database up """
 
-        self.stdout.write('waiting for database to start ...')
+        self.stdout.write('Waiting for database...')
         db_up = False
         trial_count = 0
         while db_up is False:
