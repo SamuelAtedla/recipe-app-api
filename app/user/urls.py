@@ -7,7 +7,7 @@ from django.urls import path
 from user import views
 
 app_name = "user"
-urlpattersns = [
-    # for reverse look up reverse(user:create)
+# for reverse look up reverse(user:create)
+urlpatterns = [
     path('create/', views.CreateUserView.as_view(), name='create'),
 ]
