@@ -384,9 +384,9 @@ class ImageUploadTests(TestCase):
 
     def setUp(self):
         self.client = APIClient()
-        self.user = get_user_model().objects.create(
-            'user@example.com',
-            'password123',
+        self.user = create_user(
+            email='user@example.com',
+            password='password123',
         )
         self.client.force_authenticate(self.user)
         self.recipe = create_recipe(user=self.user)
@@ -406,14 +406,13 @@ class ImageUploadTests(TestCase):
 
         self.recipe.refresh_from_db()
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertEqual('image', res.data)
+        self.assertIn('image', res.data)
         self.assertTrue(os.path.exists(self.recipe.image.path))
-    
+
     def test_upload_image_bad_request(self):
         """Test uploading invalid image."""
-        url=image_upload_url(self.recipe.ingredients)
-        payload={'image': 'notimage'}
-        res=self.client.post(url,payload, format='multipart')
-        
-        self.assertEqual(res.status_code,status.HTTP_400_BAD_REQUEST)
-        
+        url = image_upload_url(self.recipe.id)
+        payload = {'image': 'notanimage'}
+        res = self.client.post(url, payload, format='multipart')
+
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
